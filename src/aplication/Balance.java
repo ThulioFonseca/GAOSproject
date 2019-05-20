@@ -7,4 +7,17 @@ public class Balance {
 	private double totalPayment;
 	
 	
+	public double getTotalCost() {
+		return totalCost;
+	}
+	public double getTotalProfit() {
+		return totalProfit;
+	}
+	public double getTotalPayment() {
+		return totalPayment;
+	}
+	
+	
+	
+	
 }

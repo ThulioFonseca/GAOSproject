@@ -23,6 +23,11 @@ import javax.swing.JTable;
 //import javax.swing.JList;
 //import javax.swing.BoxLayout;
 import javax.swing.border.LineBorder;
+import javax.swing.JSeparator;
+import javax.swing.JRadioButtonMenuItem;
+import javax.swing.Box;
+import javax.swing.border.TitledBorder;
+import javax.swing.border.EtchedBorder;
 
 public class MainWindow extends JFrame {
 
@@ -42,6 +47,9 @@ public class MainWindow extends JFrame {
 	private JTextField textFinalizarCusto;
 	private JTable tableListar;
 	private JTable tableBalanco;
+	private JTextField textCriarEmail;
+	private JTextField textCriarTelefone;
+	private JTextField textCriarFabricante;
 
 	/**
 	 * Launch the application.
@@ -75,7 +83,8 @@ public class MainWindow extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 
-		// ****************************************/< Tela Home >/*************************************************************************
+		// ****************************************/< Tela Home
+		// >/*************************************************************************
 
 		JPanel telaHome = new JPanel();
 		telaHome.setBackground(SystemColor.controlHighlight);
@@ -89,8 +98,10 @@ public class MainWindow extends JFrame {
 		lblNewLabel_2.setBounds(234, 203, 141, 46);
 		lblNewLabel_2.setFont(new Font("Bauhaus 93", Font.PLAIN, 31));
 		telaHome.add(lblNewLabel_2);
+		contentPane.setLayout(null);
 
-		// ****************************************/< Tela Criar >/***********************************************************************
+		// ****************************************/< Tela Criar
+		// >/***********************************************************************
 
 		JPanel telaCriar = new JPanel();
 		telaCriar.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
@@ -103,56 +114,90 @@ public class MainWindow extends JFrame {
 
 		textCriarCliente = new JTextField();
 		textCriarCliente.setToolTipText("Cliente");
-		textCriarCliente.setBounds(54, 155, 439, 20);
+		textCriarCliente.setBounds(55, 105, 439, 20);
 		telaCriar.add(textCriarCliente);
 		textCriarCliente.setColumns(10);
 
 		textCriarModelo = new JTextField();
-		textCriarModelo.setBounds(55, 203, 312, 20);
+		textCriarModelo.setBounds(292, 234, 202, 20);
 		telaCriar.add(textCriarModelo);
 		textCriarModelo.setColumns(10);
 
 		textCriarData = new JTextField();
-		textCriarData.setBounds(397, 203, 96, 20);
+		textCriarData.setBounds(55, 392, 96, 20);
 		telaCriar.add(textCriarData);
 		textCriarData.setColumns(10);
 
 		JLabel lblCriarClient = new JLabel("Cliente");
-		lblCriarClient.setBounds(56, 137, 48, 14);
+		lblCriarClient.setBounds(55, 87, 48, 14);
 		telaCriar.add(lblCriarClient);
 
 		JLabel lblCriarModelo = new JLabel("Modelo");
-		lblCriarModelo.setBounds(57, 185, 48, 14);
+		lblCriarModelo.setBounds(294, 216, 48, 14);
 		telaCriar.add(lblCriarModelo);
 
 		JLabel lblCriarData = new JLabel("Data");
-		lblCriarData.setBounds(399, 186, 48, 14);
+		lblCriarData.setBounds(56, 377, 48, 14);
 		telaCriar.add(lblCriarData);
 
 		JTextArea textCriarDescricao = new JTextArea();
 		textCriarDescricao.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		textCriarDescricao.setBounds(56, 250, 437, 90);
+		textCriarDescricao.setBounds(56, 281, 437, 90);
 		telaCriar.add(textCriarDescricao);
 
-		JLabel lblCriarDescricao = new JLabel("Descri\u00E7\u00E3o");
-		lblCriarDescricao.setBounds(56, 230, 76, 14);
+		JLabel lblCriarDescricao = new JLabel("Descri\u00E7\u00E3o do Problema");
+		lblCriarDescricao.setBounds(56, 261, 132, 14);
 		telaCriar.add(lblCriarDescricao);
 
 		JButton btnCriarCancelar = new JButton("Cancelar");
-		btnCriarCancelar.setBounds(404, 413, 89, 23);
+		btnCriarCancelar.setBounds(404, 444, 89, 23);
 		telaCriar.add(btnCriarCancelar);
 
 		JButton btnCriarSalvar = new JButton("Salvar");
-		btnCriarSalvar.setBounds(305, 413, 89, 23);
+		btnCriarSalvar.setBounds(305, 444, 89, 23);
 		telaCriar.add(btnCriarSalvar);
 
 		JLabel lblCriarNovaOrdem = new JLabel("Criar nova Ordem de Servi\u00E7o");
 		lblCriarNovaOrdem.setFont(new Font("Berlin Sans FB Demi", Font.PLAIN, 18));
 		lblCriarNovaOrdem.setBounds(54, 36, 267, 36);
 		telaCriar.add(lblCriarNovaOrdem);
-		contentPane.setLayout(null);
 
-		// *************************************/< Tela Finalizar >/*************************************************************************************
+		JLabel lblCriarEmail = new JLabel("Email");
+		lblCriarEmail.setBounds(55, 136, 48, 14);
+		telaCriar.add(lblCriarEmail);
+
+		textCriarEmail = new JTextField();
+		textCriarEmail.setBounds(55, 154, 202, 20);
+		telaCriar.add(textCriarEmail);
+		textCriarEmail.setColumns(10);
+
+		textCriarTelefone = new JTextField();
+		textCriarTelefone.setBounds(292, 154, 201, 20);
+		telaCriar.add(textCriarTelefone);
+		textCriarTelefone.setColumns(10);
+
+		JLabel lblCriarTelefone = new JLabel("Telefone");
+		lblCriarTelefone.setBounds(294, 136, 48, 14);
+		telaCriar.add(lblCriarTelefone);
+
+		JLabel lblCriarFabricante = new JLabel("Fabricante ");
+		lblCriarFabricante.setBounds(57, 216, 75, 14);
+		telaCriar.add(lblCriarFabricante);
+
+		textCriarFabricante = new JTextField();
+		textCriarFabricante.setBounds(55, 234, 202, 20);
+		telaCriar.add(textCriarFabricante);
+		textCriarFabricante.setColumns(10);
+
+		Box horizontalBoxCriar = Box.createHorizontalBox();
+		horizontalBoxCriar.setBorder(new TitledBorder(
+				new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), " Device ",
+				TitledBorder.CENTER, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		horizontalBoxCriar.setBounds(41, 192, 487, 235);
+		telaCriar.add(horizontalBoxCriar);
+
+		// *************************************/< Tela Finalizar
+		// >/*************************************************************************************
 
 		JPanel telaFinalizar = new JPanel();
 		telaFinalizar.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
@@ -275,7 +320,8 @@ public class MainWindow extends JFrame {
 		lblPrecoCifra.setBounds(408, 371, 48, 14);
 		telaFinalizar.add(lblPrecoCifra);
 
-		// *************************************/< Tela Listar >/****************************************************************************************
+		// *************************************/< Tela Listar
+		// >/****************************************************************************************
 
 		JPanel telaListar = new JPanel();
 		telaListar.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
@@ -314,7 +360,8 @@ public class MainWindow extends JFrame {
 		lblListarOrdensDe.setBounds(54, 36, 267, 36);
 		telaListar.add(lblListarOrdensDe);
 
-		// ***************************************/< Tela Balanço >/***************************************************************************
+		// ***************************************/< Tela Balanço
+		// >/***************************************************************************
 
 		JPanel telaBalanco = new JPanel();
 		telaBalanco.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
@@ -334,7 +381,8 @@ public class MainWindow extends JFrame {
 		lblBalanco.setBounds(54, 36, 267, 36);
 		telaBalanco.add(lblBalanco);
 
-		// ******************************************************/< Tela Menu Lateral >/*********************************************************
+		// ******************************************************/< Tela Menu Lateral
+		// >/*********************************************************
 
 		JPanel menuLateral = new JPanel();
 		menuLateral.setBackground(SystemColor.menu);
@@ -398,11 +446,11 @@ public class MainWindow extends JFrame {
 		});
 		btnBalanoFinanceiro.setBounds(10, 198, 162, 34);
 		menuLateral.add(btnBalanoFinanceiro);
-		
+
 		JButton btnNewButton_1 = new JButton("Gaos");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+
 				telaHome.setVisible(true);
 				telaCriar.setVisible(false);
 				telaFinalizar.setVisible(false);
