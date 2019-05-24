@@ -7,27 +7,31 @@ import java.awt.Font;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.LinkedList;
+import java.util.List;
 
+import javax.swing.Box;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.border.EmptyBorder;
+import javax.swing.ListSelectionModel;
 //import javax.swing.border.EtchedBorder;
 import javax.swing.border.BevelBorder;
-import javax.swing.JRadioButton;
-import javax.swing.JCheckBox;
-import javax.swing.JTable;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.EtchedBorder;
 //import javax.swing.JList;
 //import javax.swing.BoxLayout;
 import javax.swing.border.LineBorder;
-import javax.swing.JSeparator;
-import javax.swing.JRadioButtonMenuItem;
-import javax.swing.Box;
 import javax.swing.border.TitledBorder;
-import javax.swing.border.EtchedBorder;
+import javax.swing.table.DefaultTableModel;
+
+import aplication.Client;
 
 public class MainWindow extends JFrame {
 
@@ -55,9 +59,11 @@ public class MainWindow extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+
 					MainWindow frame = new MainWindow();
 					frame.setVisible(true);
 				} catch (Exception e) {
@@ -65,12 +71,15 @@ public class MainWindow extends JFrame {
 				}
 			}
 		});
+
 	}
 
 	/**
 	 * Create the frame.
 	 */
 	public MainWindow() {
+
+		List<Client> lista = new LinkedList<Client>();
 
 		setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		setResizable(false);
@@ -114,78 +123,74 @@ public class MainWindow extends JFrame {
 
 		textCriarCliente = new JTextField();
 		textCriarCliente.setToolTipText("Cliente");
-		textCriarCliente.setBounds(55, 105, 439, 20);
+		textCriarCliente.setBounds(65, 105, 439, 20);
 		telaCriar.add(textCriarCliente);
 		textCriarCliente.setColumns(10);
 
 		textCriarModelo = new JTextField();
-		textCriarModelo.setBounds(292, 234, 202, 20);
+		textCriarModelo.setBounds(302, 234, 202, 20);
 		telaCriar.add(textCriarModelo);
 		textCriarModelo.setColumns(10);
 
 		textCriarData = new JTextField();
-		textCriarData.setBounds(55, 392, 96, 20);
+		textCriarData.setBounds(65, 392, 96, 20);
 		telaCriar.add(textCriarData);
 		textCriarData.setColumns(10);
 
 		JLabel lblCriarClient = new JLabel("Cliente");
-		lblCriarClient.setBounds(55, 87, 48, 14);
+		lblCriarClient.setBounds(65, 87, 48, 14);
 		telaCriar.add(lblCriarClient);
 
 		JLabel lblCriarModelo = new JLabel("Modelo");
-		lblCriarModelo.setBounds(294, 216, 48, 14);
+		lblCriarModelo.setBounds(304, 216, 48, 14);
 		telaCriar.add(lblCriarModelo);
 
 		JLabel lblCriarData = new JLabel("Data");
-		lblCriarData.setBounds(56, 377, 48, 14);
+		lblCriarData.setBounds(66, 377, 48, 14);
 		telaCriar.add(lblCriarData);
 
 		JTextArea textCriarDescricao = new JTextArea();
 		textCriarDescricao.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		textCriarDescricao.setBounds(56, 281, 437, 90);
+		textCriarDescricao.setBounds(66, 281, 437, 90);
 		telaCriar.add(textCriarDescricao);
 
 		JLabel lblCriarDescricao = new JLabel("Descri\u00E7\u00E3o do Problema");
-		lblCriarDescricao.setBounds(56, 261, 132, 14);
+		lblCriarDescricao.setBounds(66, 261, 150, 14);
 		telaCriar.add(lblCriarDescricao);
 
 		JButton btnCriarCancelar = new JButton("Cancelar");
-		btnCriarCancelar.setBounds(404, 444, 89, 23);
+		btnCriarCancelar.setBounds(414, 444, 89, 23);
 		telaCriar.add(btnCriarCancelar);
-
-		JButton btnCriarSalvar = new JButton("Salvar");
-		btnCriarSalvar.setBounds(305, 444, 89, 23);
-		telaCriar.add(btnCriarSalvar);
 
 		JLabel lblCriarNovaOrdem = new JLabel("Criar nova Ordem de Servi\u00E7o");
 		lblCriarNovaOrdem.setFont(new Font("Berlin Sans FB Demi", Font.PLAIN, 18));
-		lblCriarNovaOrdem.setBounds(54, 36, 267, 36);
+		lblCriarNovaOrdem.setBounds(64, 36, 267, 36);
 		telaCriar.add(lblCriarNovaOrdem);
 
 		JLabel lblCriarEmail = new JLabel("Email");
-		lblCriarEmail.setBounds(55, 136, 48, 14);
+		lblCriarEmail.setBounds(65, 136, 48, 14);
 		telaCriar.add(lblCriarEmail);
 
 		textCriarEmail = new JTextField();
-		textCriarEmail.setBounds(55, 154, 202, 20);
+		textCriarEmail.setBounds(65, 154, 202, 20);
 		telaCriar.add(textCriarEmail);
 		textCriarEmail.setColumns(10);
 
 		textCriarTelefone = new JTextField();
-		textCriarTelefone.setBounds(292, 154, 201, 20);
+		textCriarTelefone.setBounds(302, 154, 201, 20);
 		telaCriar.add(textCriarTelefone);
 		textCriarTelefone.setColumns(10);
 
 		JLabel lblCriarTelefone = new JLabel("Telefone");
-		lblCriarTelefone.setBounds(294, 136, 48, 14);
+		lblCriarTelefone.setBounds(302, 136, 75, 14);
 		telaCriar.add(lblCriarTelefone);
 
 		JLabel lblCriarFabricante = new JLabel("Fabricante ");
-		lblCriarFabricante.setBounds(57, 216, 75, 14);
+		lblCriarFabricante.setBounds(67, 216, 75, 14);
 		telaCriar.add(lblCriarFabricante);
 
 		textCriarFabricante = new JTextField();
-		textCriarFabricante.setBounds(55, 234, 202, 20);
+		textCriarFabricante.setBounds(65, 234, 202, 20);
 		telaCriar.add(textCriarFabricante);
 		textCriarFabricante.setColumns(10);
 
@@ -195,6 +200,31 @@ public class MainWindow extends JFrame {
 				TitledBorder.CENTER, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		horizontalBoxCriar.setBounds(41, 192, 487, 235);
 		telaCriar.add(horizontalBoxCriar);
+
+		JButton btnCriarSalvar = new JButton("Salvar");
+		btnCriarSalvar.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				String nome, email;
+				long telefone;
+
+				nome = textCriarCliente.getText();
+				telefone = Long.parseLong(textCriarTelefone.getText());
+				email = textCriarEmail.getText();
+
+				Client cliente = new Client(nome, telefone, email);
+				lista.add(cliente);
+
+				textCriarCliente.setText(null);
+				textCriarTelefone.setText(null);
+				textCriarEmail.setText(null);
+
+			}
+		});
+		btnCriarSalvar.setBounds(315, 444, 89, 23);
+		telaCriar.add(btnCriarSalvar);
 
 		// *************************************/< Tela Finalizar
 		// >/*************************************************************************************
@@ -209,119 +239,122 @@ public class MainWindow extends JFrame {
 
 		JRadioButton rdbtnCancelarOrdem = new JRadioButton("Cancelar ordem");
 		rdbtnCancelarOrdem.setBackground(SystemColor.controlHighlight);
-		rdbtnCancelarOrdem.setBounds(139, 367, 126, 23);
+		rdbtnCancelarOrdem.setBounds(149, 367, 126, 23);
 		telaFinalizar.add(rdbtnCancelarOrdem);
 
 		JRadioButton rdbtnFiltrarOrdem = new JRadioButton("N\u00BA da Ordem");
 		rdbtnFiltrarOrdem.setBackground(SystemColor.controlHighlight);
-		rdbtnFiltrarOrdem.setBounds(408, 105, 115, 23);
+		rdbtnFiltrarOrdem.setBounds(418, 105, 115, 23);
 		telaFinalizar.add(rdbtnFiltrarOrdem);
 
 		textFinalizarPesquisar = new JTextField();
-		textFinalizarPesquisar.setBounds(54, 106, 225, 20);
+		textFinalizarPesquisar.setBounds(64, 106, 225, 20);
 		telaFinalizar.add(textFinalizarPesquisar);
 		textFinalizarPesquisar.setColumns(10);
 
 		JRadioButton rdbtnFiltrarCliente = new JRadioButton("Cliente");
 		rdbtnFiltrarCliente.setBackground(SystemColor.controlHighlight);
-		rdbtnFiltrarCliente.setBounds(323, 105, 83, 23);
+		rdbtnFiltrarCliente.setBounds(333, 105, 83, 23);
 		telaFinalizar.add(rdbtnFiltrarCliente);
 
 		JLabel lblFinalizarPesquisar = new JLabel("Pesquisar");
-		lblFinalizarPesquisar.setBounds(54, 87, 78, 14);
+		lblFinalizarPesquisar.setBounds(64, 87, 78, 14);
 		telaFinalizar.add(lblFinalizarPesquisar);
 
 		textFinalizarCliente = new JTextField();
 		textFinalizarCliente.setEditable(false);
 		textFinalizarCliente.setToolTipText("Cliente");
 		textFinalizarCliente.setColumns(10);
-		textFinalizarCliente.setBounds(54, 155, 439, 20);
+		textFinalizarCliente.setBounds(64, 155, 439, 20);
 		telaFinalizar.add(textFinalizarCliente);
 
 		JLabel lblFinalizarCliente = new JLabel("Cliente");
-		lblFinalizarCliente.setBounds(56, 137, 48, 14);
+		lblFinalizarCliente.setBounds(66, 137, 48, 14);
 		telaFinalizar.add(lblFinalizarCliente);
 
 		JLabel lblFinalizarModelo = new JLabel("Modelo");
-		lblFinalizarModelo.setBounds(57, 185, 48, 14);
+		lblFinalizarModelo.setBounds(67, 185, 48, 14);
 		telaFinalizar.add(lblFinalizarModelo);
 
 		textFinalizarModelo = new JTextField();
 		textFinalizarModelo.setEditable(false);
 		textFinalizarModelo.setColumns(10);
-		textFinalizarModelo.setBounds(55, 203, 312, 20);
+		textFinalizarModelo.setBounds(65, 203, 312, 20);
 		telaFinalizar.add(textFinalizarModelo);
 
 		JLabel lblFinalizarDescricao = new JLabel("Descri\u00E7\u00E3o");
-		lblFinalizarDescricao.setBounds(56, 230, 76, 14);
+		lblFinalizarDescricao.setBounds(66, 230, 76, 14);
 		telaFinalizar.add(lblFinalizarDescricao);
 
 		JTextArea textFinalizarDescricao = new JTextArea();
 		textFinalizarDescricao.setEditable(false);
-		textFinalizarDescricao.setBounds(56, 250, 437, 90);
+		textFinalizarDescricao.setBounds(66, 250, 437, 90);
 		telaFinalizar.add(textFinalizarDescricao);
 
 		textFinalizarData = new JTextField();
 		textFinalizarData.setEditable(false);
 		textFinalizarData.setColumns(10);
-		textFinalizarData.setBounds(397, 203, 96, 20);
+		textFinalizarData.setBounds(407, 203, 96, 20);
 		telaFinalizar.add(textFinalizarData);
 
 		JLabel lblFinalizarData = new JLabel("Data");
-		lblFinalizarData.setBounds(399, 186, 48, 14);
+		lblFinalizarData.setBounds(409, 186, 48, 14);
 		telaFinalizar.add(lblFinalizarData);
 
 		JButton btnFinalizarSalvar = new JButton("Salvar");
-		btnFinalizarSalvar.setBounds(305, 413, 89, 23);
+		btnFinalizarSalvar.setBounds(315, 413, 89, 23);
 		telaFinalizar.add(btnFinalizarSalvar);
 
 		JButton btnFinalizarCancelar = new JButton("Cancelar");
-		btnFinalizarCancelar.setBounds(404, 413, 89, 23);
+		btnFinalizarCancelar.setBounds(414, 413, 89, 23);
 		telaFinalizar.add(btnFinalizarCancelar);
 
 		JLabel lblFinalizarValor = new JLabel("Pre\u00E7o");
-		lblFinalizarValor.setBounds(429, 351, 94, 14);
+		lblFinalizarValor.setBounds(439, 351, 94, 14);
 		telaFinalizar.add(lblFinalizarValor);
 
 		textFinalizarValor = new JTextField();
 		textFinalizarValor.setColumns(10);
-		textFinalizarValor.setBounds(427, 368, 67, 20);
+		textFinalizarValor.setBounds(437, 368, 67, 20);
 		telaFinalizar.add(textFinalizarValor);
 
 		JLabel lblFinalizarCusto = new JLabel("Custo");
-		lblFinalizarCusto.setBounds(320, 351, 48, 14);
+		lblFinalizarCusto.setBounds(330, 351, 48, 14);
 		telaFinalizar.add(lblFinalizarCusto);
 
 		textFinalizarCusto = new JTextField();
 		textFinalizarCusto.setColumns(10);
-		textFinalizarCusto.setBounds(320, 368, 67, 20);
+		textFinalizarCusto.setBounds(330, 368, 67, 20);
 		telaFinalizar.add(textFinalizarCusto);
 
 		JCheckBox chckbxGerarRelatrio = new JCheckBox("Gerar relat\u00F3rio");
 		chckbxGerarRelatrio.setBackground(SystemColor.controlHighlight);
-		chckbxGerarRelatrio.setBounds(54, 413, 126, 23);
+		chckbxGerarRelatrio.setBounds(64, 413, 126, 23);
 		telaFinalizar.add(chckbxGerarRelatrio);
 
 		JRadioButton rdbtnFinalizarFinalizar = new JRadioButton("Finalizar");
 		rdbtnFinalizarFinalizar.setBackground(SystemColor.controlHighlight);
-		rdbtnFinalizarFinalizar.setBounds(54, 367, 83, 23);
+		rdbtnFinalizarFinalizar.setBounds(64, 367, 83, 23);
 		telaFinalizar.add(rdbtnFinalizarFinalizar);
 
 		JLabel lblFinalizarOrdemDe = new JLabel("Finalizar Ordem de Servi\u00E7o");
 		lblFinalizarOrdemDe.setFont(new Font("Berlin Sans FB Demi", Font.PLAIN, 18));
-		lblFinalizarOrdemDe.setBounds(54, 36, 267, 36);
+		lblFinalizarOrdemDe.setBounds(64, 36, 267, 36);
 		telaFinalizar.add(lblFinalizarOrdemDe);
 
 		JLabel lblCustoCifra = new JLabel("R$");
-		lblCustoCifra.setBounds(301, 371, 48, 14);
+		lblCustoCifra.setBounds(311, 371, 48, 14);
 		telaFinalizar.add(lblCustoCifra);
 
 		JLabel lblPrecoCifra = new JLabel("R$");
-		lblPrecoCifra.setBounds(408, 371, 48, 14);
+		lblPrecoCifra.setBounds(418, 371, 48, 14);
 		telaFinalizar.add(lblPrecoCifra);
 
 		// *************************************/< Tela Listar
 		// >/****************************************************************************************
+
+		String titulo[] = { "Nome", "E-mail", "Telefone" };
+		DefaultTableModel modelo = new DefaultTableModel(titulo, 1);
 
 		JPanel telaListar = new JPanel();
 		telaListar.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
@@ -346,18 +379,37 @@ public class MainWindow extends JFrame {
 		rdbtnFiltarAberto.setBounds(256, 94, 93, 23);
 		telaListar.add(rdbtnFiltarAberto);
 
+		tableListar = new JTable(modelo);
+		tableListar.setRowSelectionAllowed(false);
+		
+		tableListar.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		tableListar.setBorder(new LineBorder(new Color(0, 0, 0)));
+		tableListar.setBounds(60, 145, 442, 337);
+		telaListar.add(tableListar);
+
 		JButton btnListarFiltrar = new JButton("Filtrar");
+		btnListarFiltrar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				int rowCount = modelo.getRowCount();
+				for (int i = rowCount - 1; i >= 0; i--) {
+					modelo.removeRow(i);
+				}
+
+				for (Client p : lista) {
+
+					modelo.addRow(new Object[] { p.getName(), p.getEmail(), p.getPhone() });
+
+				}
+
+			}
+		});
 		btnListarFiltrar.setBounds(355, 94, 89, 23);
 		telaListar.add(btnListarFiltrar);
 
-		tableListar = new JTable();
-		tableListar.setBorder(new LineBorder(new Color(0, 0, 0)));
-		tableListar.setBounds(54, 145, 442, 337);
-		telaListar.add(tableListar);
-
 		JLabel lblListarOrdensDe = new JLabel("Listar Ordens de Servi\u00E7o");
 		lblListarOrdensDe.setFont(new Font("Berlin Sans FB Demi", Font.PLAIN, 18));
-		lblListarOrdensDe.setBounds(54, 36, 267, 36);
+		lblListarOrdensDe.setBounds(64, 36, 267, 36);
 		telaListar.add(lblListarOrdensDe);
 
 		// ***************************************/< Tela Balanço
@@ -373,12 +425,12 @@ public class MainWindow extends JFrame {
 
 		tableBalanco = new JTable();
 		tableBalanco.setBorder(new LineBorder(new Color(0, 0, 0)));
-		tableBalanco.setBounds(54, 124, 446, 368);
+		tableBalanco.setBounds(60, 124, 446, 368);
 		telaBalanco.add(tableBalanco);
 
 		JLabel lblBalanco = new JLabel("Balan\u00E7o financeiro");
 		lblBalanco.setFont(new Font("Berlin Sans FB Demi", Font.PLAIN, 18));
-		lblBalanco.setBounds(54, 36, 267, 36);
+		lblBalanco.setBounds(64, 36, 267, 36);
 		telaBalanco.add(lblBalanco);
 
 		// ******************************************************/< Tela Menu Lateral
