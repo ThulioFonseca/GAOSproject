@@ -13,14 +13,20 @@ import java.util.List;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+//import javax.swing;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+//import javax.swing.UnsupportedLookAndFeelException;
 //import javax.swing.border.EtchedBorder;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
@@ -32,12 +38,11 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
 import aplication.Client;
+import aplication.Device;
+import aplication.WorkOrder;
 
 public class MainWindow extends JFrame {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField textCriarCliente;
@@ -55,10 +60,23 @@ public class MainWindow extends JFrame {
 	private JTextField textCriarTelefone;
 	private JTextField textCriarFabricante;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
+
+		try {
+			UIManager.setLookAndFeel("com.jtattoo.plaf.acryl.AcrylLookAndFeel");
+		} catch (ClassNotFoundException e1) {
+
+			e1.printStackTrace();
+		} catch (InstantiationException e1) {
+
+			e1.printStackTrace();
+		} catch (IllegalAccessException e1) {
+
+			e1.printStackTrace();
+		} catch (UnsupportedLookAndFeelException e1) {
+
+			e1.printStackTrace();
+		}
 
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -74,12 +92,9 @@ public class MainWindow extends JFrame {
 
 	}
 
-	/**
-	 * Create the frame.
-	 */
 	public MainWindow() {
 
-		List<Client> lista = new LinkedList<Client>();
+		List<WorkOrder> lista = new LinkedList<WorkOrder>();
 
 		setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		setResizable(false);
@@ -207,19 +222,41 @@ public class MainWindow extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				String nome, email;
-				long telefone;
+				String status, nome, email, data, problema, modelo, fabricante;
+				long telefone, numero;
+				double custo, preco;
+
+				// Client
 
 				nome = textCriarCliente.getText();
 				telefone = Long.parseLong(textCriarTelefone.getText());
 				email = textCriarEmail.getText();
 
-				Client cliente = new Client(nome, telefone, email);
-				lista.add(cliente);
+				// WorkOrder
+				status = "Aberto";
+				numero = 0;
+				data = textCriarData.getText();
+				custo = 00;
+				preco = 00;
+
+				// Device
+
+				problema = textCriarDescricao.getText();
+				fabricante = textCriarFabricante.getText();
+				modelo = textCriarModelo.getText();
+
+				Client c = new Client(nome, telefone, email);
+				Device d = new Device(problema, fabricante, modelo);
+				WorkOrder ordem = new WorkOrder(status, c, d, numero, data, custo, preco);
+				lista.add(ordem);
 
 				textCriarCliente.setText(null);
 				textCriarTelefone.setText(null);
 				textCriarEmail.setText(null);
+				textCriarData.setText(null);
+				textCriarModelo.setText(null);
+				textCriarFabricante.setText(null);
+				textCriarDescricao.setText(null);
 
 			}
 		});
@@ -353,8 +390,8 @@ public class MainWindow extends JFrame {
 		// *************************************/< Tela Listar
 		// >/****************************************************************************************
 
-		String titulo[] = { "Nome", "E-mail", "Telefone" };
-		DefaultTableModel modelo = new DefaultTableModel(titulo, 1);
+		String titulo[] = { "Status", "Nome", "E-mail", "Telefone", "Modelo", "Fabricante", "Data" };
+		DefaultTableModel modelo = new DefaultTableModel(titulo, 0);
 
 		JPanel telaListar = new JPanel();
 		telaListar.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
@@ -379,13 +416,14 @@ public class MainWindow extends JFrame {
 		rdbtnFiltarAberto.setBounds(256, 94, 93, 23);
 		telaListar.add(rdbtnFiltarAberto);
 
-		tableListar = new JTable(modelo);
+		tableListar = new JTable(new DefaultTableModel(new Object[][] {},
+				new String[] { "Status", "Nome", "E-mail", "Telefone", "Modelo", "Fabricante", "Data" }));
+		tableListar.setEnabled(false);
 		tableListar.setRowSelectionAllowed(false);
-		
+
 		tableListar.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		tableListar.setBorder(new LineBorder(new Color(0, 0, 0)));
-		tableListar.setBounds(60, 145, 442, 337);
-		telaListar.add(tableListar);
+		tableListar.setBounds(60, 145, 500, 400);
+		// telaListar.add(tableListar);
 
 		JButton btnListarFiltrar = new JButton("Filtrar");
 		btnListarFiltrar.addActionListener(new ActionListener() {
@@ -396,12 +434,12 @@ public class MainWindow extends JFrame {
 					modelo.removeRow(i);
 				}
 
-				for (Client p : lista) {
+				for (WorkOrder p : lista) {
 
-					modelo.addRow(new Object[] { p.getName(), p.getEmail(), p.getPhone() });
+					modelo.addRow(new Object[] { p.getStatus(), p.getName(), p.getEmail(), p.getPhone(), p.getModel(),
+							p.getManufacture(), p.getDate() });
 
 				}
-
 			}
 		});
 		btnListarFiltrar.setBounds(355, 94, 89, 23);
@@ -411,6 +449,13 @@ public class MainWindow extends JFrame {
 		lblListarOrdensDe.setFont(new Font("Berlin Sans FB Demi", Font.PLAIN, 18));
 		lblListarOrdensDe.setBounds(64, 36, 267, 36);
 		telaListar.add(lblListarOrdensDe);
+
+		JScrollPane scrollPane = new JScrollPane(tableListar);
+		scrollPane.setAutoscrolls(true);
+
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scrollPane.setBounds(60, 145, 444, 339);
+		telaListar.add(scrollPane);
 
 		// ***************************************/< Tela Balanço
 		// >/***************************************************************************

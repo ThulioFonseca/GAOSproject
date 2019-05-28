@@ -8,7 +8,7 @@ public class Client {
 	
 	
 	public Client(String name, long phone, String email) {
-		super();
+		
 		this.name = name;
 		this.phone = phone;
 		this.email = email;

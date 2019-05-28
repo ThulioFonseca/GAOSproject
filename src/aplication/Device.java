@@ -8,7 +8,7 @@ public class Device {
 	
 	
 	public Device(String trouble, String manufacture, String model) {
-		super();
+		
 		this.trouble = trouble;
 		this.manufacture = manufacture;
 		this.model = model;
