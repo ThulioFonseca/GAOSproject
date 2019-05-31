@@ -4,18 +4,19 @@ package aplication;
 
 public class WorkOrder {
 	private String status;
-	private long number;
+	private  long number = 000;
 	private String date;
 	private double cost;
 	private double price;
 	private Device d;
 	private Client c;
+	private static int ID_sequence = 000;
 
-	public WorkOrder(String status, Client c, Device d, long number, String date, double cost, double price) {
+	public WorkOrder(String status, Client c, Device d, String date, double cost, double price) {
 		this.status = status;
 		this.c = c;
 		this.d = d;
-		this.number = number;
+		this.number = ID_sequence++;
 		this.date = date;
 		this.cost = cost;
 		this.price = price;
@@ -60,9 +61,6 @@ public class WorkOrder {
 		return number;
 	}
 
-	public void setNumber(long number) {
-		this.number = number;
-	}
 
 	public String getDate() {
 		return date;

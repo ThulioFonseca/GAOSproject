@@ -9,11 +9,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.LinkedList;
 import java.util.List;
-
 import javax.swing.Box;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-//import javax.swing;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -26,17 +25,12 @@ import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-//import javax.swing.UnsupportedLookAndFeelException;
-//import javax.swing.border.EtchedBorder;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
-//import javax.swing.JList;
-//import javax.swing.BoxLayout;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
-
 import aplication.Client;
 import aplication.Device;
 import aplication.WorkOrder;
@@ -223,7 +217,7 @@ public class MainWindow extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 
 				String status, nome, email, data, problema, modelo, fabricante;
-				long telefone, numero;
+				long telefone;
 				double custo, preco;
 
 				// Client
@@ -234,7 +228,6 @@ public class MainWindow extends JFrame {
 
 				// WorkOrder
 				status = "Aberto";
-				numero = 0;
 				data = textCriarData.getText();
 				custo = 00;
 				preco = 00;
@@ -247,7 +240,7 @@ public class MainWindow extends JFrame {
 
 				Client c = new Client(nome, telefone, email);
 				Device d = new Device(problema, fabricante, modelo);
-				WorkOrder ordem = new WorkOrder(status, c, d, numero, data, custo, preco);
+				WorkOrder ordem = new WorkOrder(status, c, d, data, custo, preco);
 				lista.add(ordem);
 
 				textCriarCliente.setText(null);
@@ -279,7 +272,7 @@ public class MainWindow extends JFrame {
 		rdbtnCancelarOrdem.setBounds(149, 367, 126, 23);
 		telaFinalizar.add(rdbtnCancelarOrdem);
 
-		JRadioButton rdbtnFiltrarOrdem = new JRadioButton("N\u00BA da Ordem");
+		JRadioButton rdbtnFiltrarOrdem = new JRadioButton("ID da Ordem");
 		rdbtnFiltrarOrdem.setBackground(SystemColor.controlHighlight);
 		rdbtnFiltrarOrdem.setBounds(418, 105, 115, 23);
 		telaFinalizar.add(rdbtnFiltrarOrdem);
@@ -294,9 +287,17 @@ public class MainWindow extends JFrame {
 		rdbtnFiltrarCliente.setBounds(333, 105, 83, 23);
 		telaFinalizar.add(rdbtnFiltrarCliente);
 
+		ButtonGroup pesquisa = new ButtonGroup();
+		pesquisa.add(rdbtnFiltrarCliente);
+		pesquisa.add(rdbtnFiltrarOrdem);
+
 		JLabel lblFinalizarPesquisar = new JLabel("Pesquisar");
 		lblFinalizarPesquisar.setBounds(64, 87, 78, 14);
 		telaFinalizar.add(lblFinalizarPesquisar);
+		
+		JButton btnFinalizarGO = new JButton("IR");
+		btnFinalizarGO.setBounds(290, 105, 36, 24);
+		telaFinalizar.add(btnFinalizarGO);
 
 		textFinalizarCliente = new JTextField();
 		textFinalizarCliente.setEditable(false);
@@ -374,6 +375,10 @@ public class MainWindow extends JFrame {
 		rdbtnFinalizarFinalizar.setBounds(64, 367, 83, 23);
 		telaFinalizar.add(rdbtnFinalizarFinalizar);
 
+		ButtonGroup finaliza = new ButtonGroup();
+		finaliza.add(rdbtnFinalizarFinalizar);
+		finaliza.add(rdbtnCancelarOrdem);
+
 		JLabel lblFinalizarOrdemDe = new JLabel("Finalizar Ordem de Servi\u00E7o");
 		lblFinalizarOrdemDe.setFont(new Font("Berlin Sans FB Demi", Font.PLAIN, 18));
 		lblFinalizarOrdemDe.setBounds(64, 36, 267, 36);
@@ -389,9 +394,6 @@ public class MainWindow extends JFrame {
 
 		// *************************************/< Tela Listar
 		// >/****************************************************************************************
-
-		String titulo[] = { "Status", "Nome", "E-mail", "Telefone", "Modelo", "Fabricante", "Data" };
-		DefaultTableModel modelo = new DefaultTableModel(titulo, 0);
 
 		JPanel telaListar = new JPanel();
 		telaListar.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
@@ -416,32 +418,33 @@ public class MainWindow extends JFrame {
 		rdbtnFiltarAberto.setBounds(256, 94, 93, 23);
 		telaListar.add(rdbtnFiltarAberto);
 
-		tableListar = new JTable(new DefaultTableModel(new Object[][] {},
-				new String[] { "Status", "Nome", "E-mail", "Telefone", "Modelo", "Fabricante", "Data" }));
+		String titulo[] = { "ID", "Status", "Nome", "E-mail", "Telefone", "Modelo", "Fabricante", "Data" };
+		DefaultTableModel modelo = new DefaultTableModel(titulo, 0);
+
+		tableListar = new JTable(modelo);
 		tableListar.setEnabled(false);
 		tableListar.setRowSelectionAllowed(false);
-
+		tableListar.setAutoscrolls(true);
+		tableListar.getTableHeader().setReorderingAllowed(false);
 		tableListar.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tableListar.setBounds(60, 145, 500, 400);
 		// telaListar.add(tableListar);
 
 		JButton btnListarFiltrar = new JButton("Filtrar");
-		btnListarFiltrar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-				int rowCount = modelo.getRowCount();
-				for (int i = rowCount - 1; i >= 0; i--) {
-					modelo.removeRow(i);
-				}
-
-				for (WorkOrder p : lista) {
-
-					modelo.addRow(new Object[] { p.getStatus(), p.getName(), p.getEmail(), p.getPhone(), p.getModel(),
-							p.getManufacture(), p.getDate() });
-
-				}
-			}
-		});
+		/*
+		 * btnListarFiltrar.addActionListener(new ActionListener() { public void
+		 * actionPerformed(ActionEvent e) {
+		 * 
+		 * int rowCount = modelo.getRowCount(); for (int i = rowCount - 1; i >= 0; i--)
+		 * { modelo.removeRow(i); }
+		 * 
+		 * for (WorkOrder p : lista) {
+		 * 
+		 * modelo.addRow(new Object[] { p.getNumber(),p.getStatus(), p.getName(),
+		 * p.getEmail(), p.getPhone(), p.getModel(), p.getManufacture(), p.getDate() });
+		 * 
+		 * } } });
+		 */
 		btnListarFiltrar.setBounds(355, 94, 89, 23);
 		telaListar.add(btnListarFiltrar);
 
@@ -454,7 +457,7 @@ public class MainWindow extends JFrame {
 		scrollPane.setAutoscrolls(true);
 
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		scrollPane.setBounds(60, 145, 444, 339);
+		scrollPane.setBounds(25, 145, 520, 359);
 		telaListar.add(scrollPane);
 
 		// ***************************************/< Tela Balanço
@@ -524,6 +527,18 @@ public class MainWindow extends JFrame {
 				telaFinalizar.setVisible(false);
 				telaListar.setVisible(true);
 				telaBalanco.setVisible(false);
+
+				int rowCount = modelo.getRowCount();
+				for (int i = rowCount - 1; i >= 0; i--) {
+					modelo.removeRow(i);
+				}
+
+				for (WorkOrder p : lista) {
+
+					modelo.addRow(new Object[] { p.getNumber(), p.getStatus(), p.getName(), p.getEmail(), p.getPhone(),
+							p.getModel(), p.getManufacture(), p.getDate() });
+
+				}
 
 			}
 		});
