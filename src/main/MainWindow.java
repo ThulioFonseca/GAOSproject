@@ -11,6 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
+import javax.swing.ButtonModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
@@ -53,6 +54,7 @@ public class MainWindow extends JFrame {
 	private JTextField textCriarEmail;
 	private JTextField textCriarTelefone;
 	private JTextField textCriarFabricante;
+	private JTextField textFinalizarStatus;
 
 	public static void main(String[] args) {
 
@@ -269,7 +271,7 @@ public class MainWindow extends JFrame {
 
 		JRadioButton rdbtnCancelarOrdem = new JRadioButton("Cancelar ordem");
 		rdbtnCancelarOrdem.setBackground(SystemColor.controlHighlight);
-		rdbtnCancelarOrdem.setBounds(149, 367, 126, 23);
+		rdbtnCancelarOrdem.setBounds(149, 413, 126, 23);
 		telaFinalizar.add(rdbtnCancelarOrdem);
 
 		JRadioButton rdbtnFiltrarOrdem = new JRadioButton("ID da Ordem");
@@ -282,9 +284,21 @@ public class MainWindow extends JFrame {
 		telaFinalizar.add(textFinalizarPesquisar);
 		textFinalizarPesquisar.setColumns(10);
 
+		JLabel lblFinalizarStatus = new JLabel("Status");
+		lblFinalizarStatus.setBounds(67, 349, 55, 16);
+		telaFinalizar.add(lblFinalizarStatus);
+
+		textFinalizarStatus = new JTextField();
+		textFinalizarStatus.setEditable(false);
+		textFinalizarStatus.setBounds(67, 368, 100, 20);
+		telaFinalizar.add(textFinalizarStatus);
+		textFinalizarStatus.setColumns(10);
+
 		JRadioButton rdbtnFiltrarCliente = new JRadioButton("Cliente");
+		rdbtnFiltrarCliente.setActionCommand("true");
 		rdbtnFiltrarCliente.setBackground(SystemColor.controlHighlight);
 		rdbtnFiltrarCliente.setBounds(333, 105, 83, 23);
+		// rdbtnFiltrarCliente.addActionListener(this);
 		telaFinalizar.add(rdbtnFiltrarCliente);
 
 		ButtonGroup pesquisa = new ButtonGroup();
@@ -294,10 +308,6 @@ public class MainWindow extends JFrame {
 		JLabel lblFinalizarPesquisar = new JLabel("Pesquisar");
 		lblFinalizarPesquisar.setBounds(64, 87, 78, 14);
 		telaFinalizar.add(lblFinalizarPesquisar);
-		
-		JButton btnFinalizarGO = new JButton("IR");
-		btnFinalizarGO.setBounds(290, 105, 36, 24);
-		telaFinalizar.add(btnFinalizarGO);
 
 		textFinalizarCliente = new JTextField();
 		textFinalizarCliente.setEditable(false);
@@ -340,11 +350,11 @@ public class MainWindow extends JFrame {
 		telaFinalizar.add(lblFinalizarData);
 
 		JButton btnFinalizarSalvar = new JButton("Salvar");
-		btnFinalizarSalvar.setBounds(315, 413, 89, 23);
+		btnFinalizarSalvar.setBounds(315, 450, 89, 23);
 		telaFinalizar.add(btnFinalizarSalvar);
 
 		JButton btnFinalizarCancelar = new JButton("Cancelar");
-		btnFinalizarCancelar.setBounds(414, 413, 89, 23);
+		btnFinalizarCancelar.setBounds(414, 450, 89, 23);
 		telaFinalizar.add(btnFinalizarCancelar);
 
 		JLabel lblFinalizarValor = new JLabel("Pre\u00E7o");
@@ -367,12 +377,12 @@ public class MainWindow extends JFrame {
 
 		JCheckBox chckbxGerarRelatrio = new JCheckBox("Gerar relat\u00F3rio");
 		chckbxGerarRelatrio.setBackground(SystemColor.controlHighlight);
-		chckbxGerarRelatrio.setBounds(64, 413, 126, 23);
+		chckbxGerarRelatrio.setBounds(64, 450, 126, 23);
 		telaFinalizar.add(chckbxGerarRelatrio);
 
 		JRadioButton rdbtnFinalizarFinalizar = new JRadioButton("Finalizar");
 		rdbtnFinalizarFinalizar.setBackground(SystemColor.controlHighlight);
-		rdbtnFinalizarFinalizar.setBounds(64, 367, 83, 23);
+		rdbtnFinalizarFinalizar.setBounds(64, 413, 83, 23);
 		telaFinalizar.add(rdbtnFinalizarFinalizar);
 
 		ButtonGroup finaliza = new ButtonGroup();
@@ -391,6 +401,47 @@ public class MainWindow extends JFrame {
 		JLabel lblPrecoCifra = new JLabel("R$");
 		lblPrecoCifra.setBounds(418, 371, 48, 14);
 		telaFinalizar.add(lblPrecoCifra);
+
+		JButton btnFinalizarGO = new JButton("IR");
+		btnFinalizarGO.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+
+				for (int i = 0; i < lista.size(); i++) {
+
+					if (rdbtnFiltrarCliente.isSelected() == true) {
+						String name = lista.get(i).getName();
+						if (textFinalizarPesquisar.getText().equals(name)) {
+
+							textFinalizarCliente.setText(lista.get(i).getName());
+							textFinalizarDescricao.setText(lista.get(i).getTrouble());
+							textFinalizarModelo.setText(lista.get(i).getModel());
+							textFinalizarData.setText(lista.get(i).getDate());
+							textFinalizarStatus.setText(lista.get(i).getStatus());
+
+						}
+
+					}
+
+					else {
+
+						long num = lista.get(i).getNumber();
+
+						if (num == Long.parseLong(textFinalizarPesquisar.getText())) {
+
+							textFinalizarCliente.setText(lista.get(i).getName());
+							textFinalizarDescricao.setText(lista.get(i).getTrouble());
+							textFinalizarModelo.setText(lista.get(i).getModel());
+							textFinalizarData.setText(lista.get(i).getDate());
+							textFinalizarStatus.setText(lista.get(i).getStatus());
+
+						}
+
+					}
+				}
+			}
+		});
+		btnFinalizarGO.setBounds(290, 105, 36, 24);
+		telaFinalizar.add(btnFinalizarGO);
 
 		// *************************************/< Tela Listar
 		// >/****************************************************************************************
