@@ -9,9 +9,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.LinkedList;
 import java.util.List;
+
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
-import javax.swing.ButtonModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
@@ -32,6 +32,7 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
+
 import aplication.Client;
 import aplication.Device;
 import aplication.WorkOrder;
@@ -349,10 +350,6 @@ public class MainWindow extends JFrame {
 		lblFinalizarData.setBounds(409, 186, 48, 14);
 		telaFinalizar.add(lblFinalizarData);
 
-		JButton btnFinalizarSalvar = new JButton("Salvar");
-		btnFinalizarSalvar.setBounds(315, 450, 89, 23);
-		telaFinalizar.add(btnFinalizarSalvar);
-
 		JButton btnFinalizarCancelar = new JButton("Cancelar");
 		btnFinalizarCancelar.setBounds(414, 450, 89, 23);
 		telaFinalizar.add(btnFinalizarCancelar);
@@ -402,8 +399,15 @@ public class MainWindow extends JFrame {
 		lblPrecoCifra.setBounds(418, 371, 48, 14);
 		telaFinalizar.add(lblPrecoCifra);
 
+		JButton btnFinalizarSalvar = new JButton("Salvar");
+		btnFinalizarSalvar.setBounds(315, 450, 89, 23);
+		telaFinalizar.add(btnFinalizarSalvar);
+
 		JButton btnFinalizarGO = new JButton("IR");
 		btnFinalizarGO.addActionListener(new ActionListener() {
+
+			int index = 0;
+
 			public void actionPerformed(ActionEvent arg0) {
 
 				for (int i = 0; i < lista.size(); i++) {
@@ -434,12 +438,45 @@ public class MainWindow extends JFrame {
 							textFinalizarData.setText(lista.get(i).getDate());
 							textFinalizarStatus.setText(lista.get(i).getStatus());
 
+							index = i;
+
 						}
 
 					}
+
+					btnFinalizarSalvar.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent arg0) {
+
+							lista.get(index).setCost(Double.parseDouble(textFinalizarCusto.getText()));
+							lista.get(index).setPrice(Double.parseDouble(textFinalizarValor.getText()));
+
+							if (rdbtnFinalizarFinalizar.isSelected() == true) {
+
+								String status = "Finalizado";
+
+								lista.get(index).setStatus(status);
+
+							}
+
+							else {
+
+								String status = "Cancelado";
+
+								lista.get(index).setStatus(status);
+							}
+
+							/*
+							 * textFinalizarCusto.setText("0"); textFinalizarValor.setText("0");
+							 */
+
+						}
+					});
+
 				}
+
 			}
 		});
+
 		btnFinalizarGO.setBounds(290, 105, 36, 24);
 		telaFinalizar.add(btnFinalizarGO);
 
@@ -522,10 +559,24 @@ public class MainWindow extends JFrame {
 		telaBalanco.setLayout(null);
 		telaBalanco.setVisible(false);
 
-		tableBalanco = new JTable();
+		String tituloBalanco[] = { "ID", "Status", "Nome", "Data", "Custo", "Valor Total" };
+		DefaultTableModel modeloBalanco = new DefaultTableModel(tituloBalanco, 0);
+
+		tableBalanco = new JTable(modeloBalanco);
 		tableBalanco.setBorder(new LineBorder(new Color(0, 0, 0)));
-		tableBalanco.setBounds(60, 124, 446, 368);
 		telaBalanco.add(tableBalanco);
+		tableBalanco.setEnabled(false);
+		tableBalanco.setRowSelectionAllowed(false);
+		tableBalanco.setAutoscrolls(true);
+		tableBalanco.getTableHeader().setReorderingAllowed(false);
+		tableBalanco.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		tableBalanco.setBounds(60, 145, 500, 400);
+		JScrollPane scrollPaneBalanco = new JScrollPane(tableBalanco);
+		scrollPaneBalanco.setAutoscrolls(true);
+
+		scrollPaneBalanco.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scrollPaneBalanco.setBounds(25, 145, 520, 359);
+		telaBalanco.add(scrollPaneBalanco);
 
 		JLabel lblBalanco = new JLabel("Balan\u00E7o financeiro");
 		lblBalanco.setFont(new Font("Berlin Sans FB Demi", Font.PLAIN, 18));
@@ -605,6 +656,18 @@ public class MainWindow extends JFrame {
 				telaListar.setVisible(false);
 				telaBalanco.setVisible(true);
 
+				int rowCount = modeloBalanco.getRowCount();
+				for (int i = rowCount - 1; i >= 0; i--) {
+					modeloBalanco.removeRow(i);
+				}
+
+				for (WorkOrder p : lista) {
+
+					modeloBalanco.addRow(new Object[] { p.getNumber(), p.getStatus(), p.getName(), p.getDate(),
+							p.getCost(), p.getPrice() });
+
+				}
+
 			}
 		});
 		btnBalanoFinanceiro.setBounds(10, 198, 162, 34);
@@ -619,6 +682,7 @@ public class MainWindow extends JFrame {
 				telaFinalizar.setVisible(false);
 				telaListar.setVisible(false);
 				telaBalanco.setVisible(false);
+
 			}
 		});
 		btnNewButton_1.setFont(new Font("Corbel Light", Font.PLAIN, 22));
