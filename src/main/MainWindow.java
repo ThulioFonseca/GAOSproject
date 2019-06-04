@@ -16,6 +16,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -164,15 +165,12 @@ public class MainWindow extends JFrame {
 		JTextArea textCriarDescricao = new JTextArea();
 		textCriarDescricao.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		textCriarDescricao.setBounds(66, 281, 437, 90);
+		textCriarDescricao.setBorder(textCriarData.getBorder());
 		telaCriar.add(textCriarDescricao);
 
 		JLabel lblCriarDescricao = new JLabel("Descri\u00E7\u00E3o do Problema");
 		lblCriarDescricao.setBounds(66, 261, 150, 14);
 		telaCriar.add(lblCriarDescricao);
-
-		JButton btnCriarCancelar = new JButton("Cancelar");
-		btnCriarCancelar.setBounds(414, 444, 89, 23);
-		telaCriar.add(btnCriarCancelar);
 
 		JLabel lblCriarNovaOrdem = new JLabel("Criar nova Ordem de Servi\u00E7o");
 		lblCriarNovaOrdem.setFont(new Font("Berlin Sans FB Demi", Font.PLAIN, 18));
@@ -219,32 +217,124 @@ public class MainWindow extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				String status, nome, email, data, problema, modelo, fabricante;
-				long telefone;
+				String status, nome, email, data, problema, modelo, fabricante, telefone;
 				double custo, preco;
 
-				// Client
+				try {
 
-				nome = textCriarCliente.getText();
-				telefone = Long.parseLong(textCriarTelefone.getText());
-				email = textCriarEmail.getText();
+					// Client
 
-				// WorkOrder
-				status = "Aberto";
-				data = textCriarData.getText();
-				custo = 00;
-				preco = 00;
+					nome = textCriarCliente.getText();
 
-				// Device
+					if (nome == null || nome.isEmpty()) {
 
-				problema = textCriarDescricao.getText();
-				fabricante = textCriarFabricante.getText();
-				modelo = textCriarModelo.getText();
+						textCriarCliente.setBackground(Color.red);
+						throw new RuntimeException("O campo 'Cliente' não pode estar vazio!");
 
-				Client c = new Client(nome, telefone, email);
-				Device d = new Device(problema, fabricante, modelo);
-				WorkOrder ordem = new WorkOrder(status, c, d, data, custo, preco);
-				lista.add(ordem);
+					}
+
+					telefone = textCriarTelefone.getText();
+
+					if (telefone == null || telefone.isEmpty()) {
+
+						textCriarTelefone.setBackground(Color.red);
+						throw new RuntimeException("O campo 'Telefone' não pode estar vazio!");
+
+					}
+
+					email = textCriarEmail.getText();
+
+					if (email == null || email.isEmpty()) {
+
+						textCriarEmail.setBackground(Color.red);
+						throw new RuntimeException("O campo 'Email' não pode estar vazio!");
+
+					}
+
+					// WorkOrder
+
+					status = "Aberto";
+					custo = 00;
+					preco = 00;
+
+					data = textCriarData.getText();
+
+					if (data == null || data.isEmpty()) {
+
+						textCriarData.setBackground(Color.red);
+						throw new RuntimeException("O campo 'Data' não pode estar vazio!");
+
+					}
+
+					// Device
+
+					problema = textCriarDescricao.getText();
+
+					if (problema == null || problema.isEmpty()) {
+
+						textCriarDescricao.setBackground(Color.red);
+						throw new RuntimeException("O campo 'Descrição do Problema' não pode estar vazio!");
+
+					}
+
+					fabricante = textCriarFabricante.getText();
+
+					if (fabricante == null || fabricante.isEmpty()) {
+
+						textCriarFabricante.setBackground(Color.red);
+						throw new RuntimeException("O campo 'Fabricante' não pode estar vazio!");
+
+					}
+
+					modelo = textCriarModelo.getText();
+
+					if (modelo == null || modelo.isEmpty()) {
+
+						textCriarModelo.setBackground(Color.red);
+						throw new RuntimeException("O campo 'Modelo' não pode estar vazio!");
+
+					}
+
+					Client c = new Client(nome, telefone, email);
+					Device d = new Device(problema, fabricante, modelo);
+					WorkOrder ordem = new WorkOrder(status, c, d, data, custo, preco);
+					lista.add(ordem);
+
+					textCriarCliente.setText(null);
+					textCriarTelefone.setText(null);
+					textCriarEmail.setText(null);
+					textCriarData.setText(null);
+					textCriarModelo.setText(null);
+					textCriarFabricante.setText(null);
+					textCriarDescricao.setText(null);
+
+				} catch (RuntimeException f) {
+
+					JOptionPane.showMessageDialog(null, f.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+					textCriarCliente.setBackground(Color.white);
+					textCriarTelefone.setBackground(Color.white);
+					textCriarEmail.setBackground(Color.white);
+					textCriarData.setBackground(Color.white);
+					textCriarFabricante.setBackground(Color.white);
+					textCriarModelo.setBackground(Color.white);
+					textCriarDescricao.setBackground(Color.white);
+
+				}
+
+			}
+		});
+		btnCriarSalvar.setBounds(315, 444, 89, 23);
+		telaCriar.add(btnCriarSalvar);
+
+		JButton btnCriarCancelar = new JButton("Cancelar");
+		btnCriarCancelar.setBounds(414, 444, 89, 23);
+		telaCriar.add(btnCriarCancelar);
+
+		btnCriarCancelar.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
 
 				textCriarCliente.setText(null);
 				textCriarTelefone.setText(null);
@@ -256,8 +346,6 @@ public class MainWindow extends JFrame {
 
 			}
 		});
-		btnCriarSalvar.setBounds(315, 444, 89, 23);
-		telaCriar.add(btnCriarSalvar);
 
 		// *************************************/< Tela Finalizar
 		// >/*************************************************************************************
@@ -276,6 +364,7 @@ public class MainWindow extends JFrame {
 		telaFinalizar.add(rdbtnCancelarOrdem);
 
 		JRadioButton rdbtnFiltrarOrdem = new JRadioButton("ID da Ordem");
+		rdbtnFiltrarOrdem.setSelected(true);
 		rdbtnFiltrarOrdem.setBackground(SystemColor.controlHighlight);
 		rdbtnFiltrarOrdem.setBounds(418, 105, 115, 23);
 		telaFinalizar.add(rdbtnFiltrarOrdem);
@@ -299,7 +388,6 @@ public class MainWindow extends JFrame {
 		rdbtnFiltrarCliente.setActionCommand("true");
 		rdbtnFiltrarCliente.setBackground(SystemColor.controlHighlight);
 		rdbtnFiltrarCliente.setBounds(333, 105, 83, 23);
-		// rdbtnFiltrarCliente.addActionListener(this);
 		telaFinalizar.add(rdbtnFiltrarCliente);
 
 		ButtonGroup pesquisa = new ButtonGroup();
@@ -447,27 +535,62 @@ public class MainWindow extends JFrame {
 					btnFinalizarSalvar.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent arg0) {
 
-							lista.get(index).setCost(Double.parseDouble(textFinalizarCusto.getText()));
-							lista.get(index).setPrice(Double.parseDouble(textFinalizarValor.getText()));
+							try {
 
-							if (rdbtnFinalizarFinalizar.isSelected() == true) {
+								String custo = textFinalizarCusto.getText();
 
-								String status = "Finalizado";
+								if (custo == null || custo.isEmpty()) {
 
-								lista.get(index).setStatus(status);
+									textFinalizarCusto.setBackground(Color.red);
+									throw new RuntimeException("O campo 'Custo' não pode estar vazio!");
 
+								}
+
+								String preco = textFinalizarValor.getText();
+
+								if (preco == null || preco.isEmpty()) {
+
+									textFinalizarValor.setBackground(Color.red);
+									throw new RuntimeException("O campo 'Valor' não pode estar vazio!");
+
+								}
+
+								if (rdbtnFinalizarFinalizar.isSelected() == true) {
+
+									String status = "Finalizado";
+
+									lista.get(index).setStatus(status);
+
+								}
+
+								if (rdbtnCancelarOrdem.isSelected() == true) {
+
+									String status = "Cancelado";
+
+									lista.get(index).setStatus(status);
+								}
+
+								if (rdbtnCancelarOrdem.isSelected() == false
+										&& rdbtnFinalizarFinalizar.isSelected() == false) {
+
+									rdbtnCancelarOrdem.setBackground(Color.red);
+									rdbtnFinalizarFinalizar.setBackground(Color.red);
+
+									throw new RuntimeException("Selecione um Status antes de salvar!");
+
+								}
+
+								lista.get(index).setCost(Double.parseDouble(custo));
+								lista.get(index).setPrice(Double.parseDouble(preco));
+
+							} catch (RuntimeException e) {
+
+								JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+								rdbtnCancelarOrdem.setBackground(rdbtnFiltrarCliente.getBackground());
+								rdbtnFinalizarFinalizar.setBackground(rdbtnFiltrarCliente.getBackground());
+								textFinalizarCusto.setBackground(Color.white);
+								textFinalizarValor.setBackground(Color.white);
 							}
-
-							else {
-
-								String status = "Cancelado";
-
-								lista.get(index).setStatus(status);
-							}
-
-							/*
-							 * textFinalizarCusto.setText("0"); textFinalizarValor.setText("0");
-							 */
 
 						}
 					});
@@ -685,6 +808,7 @@ public class MainWindow extends JFrame {
 
 			}
 		});
+
 		btnNewButton_1.setFont(new Font("Corbel Light", Font.PLAIN, 22));
 		btnNewButton_1.setFocusPainted(false);
 		btnNewButton_1.setContentAreaFilled(false);

@@ -39,7 +39,7 @@ public class WorkOrder {
 		return c.getEmail();
 	}
 
-	public long getPhone() {
+	public String getPhone() {
 		return c.getPhone();
 	}
 
