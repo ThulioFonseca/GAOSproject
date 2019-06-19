@@ -34,6 +34,7 @@ import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
+import aplication.Balance;
 import aplication.Client;
 import aplication.Device;
 import aplication.WorkOrder;
@@ -57,6 +58,9 @@ public class MainWindow extends JFrame {
 	private JTextField textCriarTelefone;
 	private JTextField textCriarFabricante;
 	private JTextField textFinalizarStatus;
+	private JTextField textBalancoCusto;
+	private JTextField textBalancoPagamento;
+	private JTextField textBalancoLucro;
 
 	public static void main(String[] args) {
 
@@ -501,7 +505,9 @@ public class MainWindow extends JFrame {
 				for (int i = 0; i < lista.size(); i++) {
 
 					if (rdbtnFiltrarCliente.isSelected() == true) {
+
 						String name = lista.get(i).getName();
+
 						if (textFinalizarPesquisar.getText().equals(name)) {
 
 							textFinalizarCliente.setText(lista.get(i).getName());
@@ -518,92 +524,100 @@ public class MainWindow extends JFrame {
 
 						long num = lista.get(i).getNumber();
 
-						if (num == Long.parseLong(textFinalizarPesquisar.getText())) {
+						try {
 
-							textFinalizarCliente.setText(lista.get(i).getName());
-							textFinalizarDescricao.setText(lista.get(i).getTrouble());
-							textFinalizarModelo.setText(lista.get(i).getModel());
-							textFinalizarData.setText(lista.get(i).getDate());
-							textFinalizarStatus.setText(lista.get(i).getStatus());
+							if (num == Long.parseLong(textFinalizarPesquisar.getText())) {
 
-							index = i;
+								textFinalizarCliente.setText(lista.get(i).getName());
+								textFinalizarDescricao.setText(lista.get(i).getTrouble());
+								textFinalizarModelo.setText(lista.get(i).getModel());
+								textFinalizarData.setText(lista.get(i).getDate());
+								textFinalizarStatus.setText(lista.get(i).getStatus());
+
+								index = i;
+
+							}
+
+						} catch (NumberFormatException g) {
+
+							JOptionPane.showMessageDialog(null, "Dados iválidos!", "Erro", JOptionPane.ERROR_MESSAGE);
 
 						}
 
 					}
-
-					btnFinalizarSalvar.addActionListener(new ActionListener() {
-						public void actionPerformed(ActionEvent arg0) {
-
-							try {
-
-								String custo = textFinalizarCusto.getText();
-
-								if (custo == null || custo.isEmpty()) {
-
-									textFinalizarCusto.setBackground(Color.red);
-									throw new RuntimeException("O campo 'Custo' não pode estar vazio!");
-
-								}
-
-								String preco = textFinalizarValor.getText();
-
-								if (preco == null || preco.isEmpty()) {
-
-									textFinalizarValor.setBackground(Color.red);
-									throw new RuntimeException("O campo 'Valor' não pode estar vazio!");
-
-								}
-
-								if (rdbtnFinalizarFinalizar.isSelected() == true) {
-
-									String status = "Finalizado";
-
-									lista.get(index).setStatus(status);
-
-								}
-
-								if (rdbtnCancelarOrdem.isSelected() == true) {
-
-									String status = "Cancelado";
-
-									lista.get(index).setStatus(status);
-								}
-
-								if (rdbtnCancelarOrdem.isSelected() == false
-										&& rdbtnFinalizarFinalizar.isSelected() == false) {
-
-									rdbtnCancelarOrdem.setBackground(Color.red);
-									rdbtnFinalizarFinalizar.setBackground(Color.red);
-
-									throw new RuntimeException("Selecione um Status antes de salvar!");
-
-								}
-
-								lista.get(index).setCost(Double.parseDouble(custo));
-								lista.get(index).setPrice(Double.parseDouble(preco));
-
-							} catch (RuntimeException e) {
-
-								JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-								rdbtnCancelarOrdem.setBackground(rdbtnFiltrarCliente.getBackground());
-								rdbtnFinalizarFinalizar.setBackground(rdbtnFiltrarCliente.getBackground());
-								textFinalizarCusto.setBackground(Color.white);
-								textFinalizarValor.setBackground(Color.white);
-							}
-
-						}
-					});
-
 				}
 
+				btnFinalizarSalvar.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+
+						try {
+
+							String custo = textFinalizarCusto.getText();
+
+							if (custo == null || custo.isEmpty()) {
+
+								textFinalizarCusto.setBackground(Color.red);
+								throw new RuntimeException("O campo 'Custo' não pode estar vazio!");
+
+							}
+
+							String preco = textFinalizarValor.getText();
+
+							if (preco == null || preco.isEmpty()) {
+
+								textFinalizarValor.setBackground(Color.red);
+								throw new RuntimeException("O campo 'Valor' não pode estar vazio!");
+
+							}
+
+							if (rdbtnFinalizarFinalizar.isSelected() == true) {
+
+								String status = "Finalizado";
+
+								lista.get(index).setStatus(status);
+
+							}
+
+							if (rdbtnCancelarOrdem.isSelected() == true) {
+
+								String status = "Cancelado";
+
+								lista.get(index).setStatus(status);
+							}
+
+							if (rdbtnCancelarOrdem.isSelected() == false
+									&& rdbtnFinalizarFinalizar.isSelected() == false) {
+
+								rdbtnCancelarOrdem.setBackground(Color.red);
+								rdbtnFinalizarFinalizar.setBackground(Color.red);
+
+								throw new RuntimeException("Selecione um Status antes de salvar!");
+
+							}
+
+							lista.get(index).setCost(Double.parseDouble(custo));
+							lista.get(index).setPrice(Double.parseDouble(preco));
+
+						} catch (RuntimeException e) {
+
+							JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+							rdbtnCancelarOrdem.setBackground(rdbtnFiltrarCliente.getBackground());
+							rdbtnFinalizarFinalizar.setBackground(rdbtnFiltrarCliente.getBackground());
+							textFinalizarCusto.setBackground(Color.white);
+							textFinalizarValor.setBackground(Color.white);
+						}
+
+					}
+				});
+
 			}
+
 		});
 
 		btnFinalizarGO.setBounds(290, 105, 36, 24);
 		telaFinalizar.add(btnFinalizarGO);
 
-		// *************************************/< Tela Listar
+		// *************************************/< Tela Listar //
 		// >/****************************************************************************************
 
 		JPanel telaListar = new JPanel();
@@ -671,6 +685,9 @@ public class MainWindow extends JFrame {
 		scrollPane.setBounds(25, 145, 520, 359);
 		telaListar.add(scrollPane);
 
+		String tituloBalanco[] = { "ID", "Status", "Nome", "Data", "Custo", "Valor Total" };
+		DefaultTableModel modeloBalanco = new DefaultTableModel(tituloBalanco, 0);
+
 		// ***************************************/< Tela Balanço
 		// >/***************************************************************************
 
@@ -681,9 +698,6 @@ public class MainWindow extends JFrame {
 		contentPane.add(telaBalanco);
 		telaBalanco.setLayout(null);
 		telaBalanco.setVisible(false);
-
-		String tituloBalanco[] = { "ID", "Status", "Nome", "Data", "Custo", "Valor Total" };
-		DefaultTableModel modeloBalanco = new DefaultTableModel(tituloBalanco, 0);
 
 		tableBalanco = new JTable(modeloBalanco);
 		tableBalanco.setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -705,6 +719,35 @@ public class MainWindow extends JFrame {
 		lblBalanco.setFont(new Font("Berlin Sans FB Demi", Font.PLAIN, 18));
 		lblBalanco.setBounds(64, 36, 267, 36);
 		telaBalanco.add(lblBalanco);
+
+		textBalancoCusto = new JTextField();
+		textBalancoCusto.setBounds(319, 102, 104, 20);
+		telaBalanco.add(textBalancoCusto);
+		textBalancoCusto.setColumns(10);
+		
+		
+
+		textBalancoPagamento = new JTextField();
+		textBalancoPagamento.setBounds(197, 102, 104, 20);
+		telaBalanco.add(textBalancoPagamento);
+		textBalancoPagamento.setColumns(10);
+
+		textBalancoLucro = new JTextField();
+		textBalancoLucro.setBounds(441, 102, 104, 20);
+		telaBalanco.add(textBalancoLucro);
+		textBalancoLucro.setColumns(10);
+
+		JLabel lblBalancoLucro = new JLabel("Lucro Total");
+		lblBalancoLucro.setBounds(441, 84, 80, 16);
+		telaBalanco.add(lblBalancoLucro);
+
+		JLabel lblBalancoCusto = new JLabel("Custo total");
+		lblBalancoCusto.setBounds(319, 84, 80, 16);
+		telaBalanco.add(lblBalancoCusto);
+
+		JLabel lblRendimentos = new JLabel("Rendimentos");
+		lblRendimentos.setBounds(197, 84, 93, 16);
+		telaBalanco.add(lblRendimentos);
 
 		// ******************************************************/< Tela Menu Lateral
 		// >/*********************************************************
@@ -778,6 +821,11 @@ public class MainWindow extends JFrame {
 				telaFinalizar.setVisible(false);
 				telaListar.setVisible(false);
 				telaBalanco.setVisible(true);
+				
+				Balance b= new Balance();
+				textBalancoCusto.setText(String.valueOf(b.getTotalCost(lista)));
+				textBalancoPagamento.setText(String.valueOf(b.getTotalPayment(lista)));
+				textBalancoLucro.setText(String.valueOf(b.getTotalProfit(lista)));
 
 				int rowCount = modeloBalanco.getRowCount();
 				for (int i = rowCount - 1; i >= 0; i--) {
