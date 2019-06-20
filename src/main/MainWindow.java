@@ -38,6 +38,7 @@ import aplication.Balance;
 import aplication.Client;
 import aplication.Device;
 import aplication.WorkOrder;
+import aplication.Errors;
 
 public class MainWindow extends JFrame {
 
@@ -96,6 +97,7 @@ public class MainWindow extends JFrame {
 
 	public MainWindow() {
 
+		Errors errors = new Errors();
 		List<WorkOrder> lista = new LinkedList<WorkOrder>();
 
 		setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
@@ -230,30 +232,15 @@ public class MainWindow extends JFrame {
 
 					nome = textCriarCliente.getText();
 
-					if (nome == null || nome.isEmpty()) {
-
-						textCriarCliente.setBackground(Color.red);
-						throw new RuntimeException("O campo 'Cliente' não pode estar vazio!");
-
-					}
+					errors.TestErrors(textCriarCliente);
 
 					telefone = textCriarTelefone.getText();
 
-					if (telefone == null || telefone.isEmpty()) {
-
-						textCriarTelefone.setBackground(Color.red);
-						throw new RuntimeException("O campo 'Telefone' não pode estar vazio!");
-
-					}
+					errors.TestErrors(textCriarTelefone);
 
 					email = textCriarEmail.getText();
 
-					if (email == null || email.isEmpty()) {
-
-						textCriarEmail.setBackground(Color.red);
-						throw new RuntimeException("O campo 'Email' não pode estar vazio!");
-
-					}
+					errors.TestErrors(textCriarEmail);
 
 					// WorkOrder
 
@@ -263,41 +250,21 @@ public class MainWindow extends JFrame {
 
 					data = textCriarData.getText();
 
-					if (data == null || data.isEmpty()) {
-
-						textCriarData.setBackground(Color.red);
-						throw new RuntimeException("O campo 'Data' não pode estar vazio!");
-
-					}
+					errors.TestErrors(textCriarData);
 
 					// Device
 
 					problema = textCriarDescricao.getText();
 
-					if (problema == null || problema.isEmpty()) {
-
-						textCriarDescricao.setBackground(Color.red);
-						throw new RuntimeException("O campo 'Descrição do Problema' não pode estar vazio!");
-
-					}
+					errors.TestErrors(textCriarDescricao);
 
 					fabricante = textCriarFabricante.getText();
 
-					if (fabricante == null || fabricante.isEmpty()) {
-
-						textCriarFabricante.setBackground(Color.red);
-						throw new RuntimeException("O campo 'Fabricante' não pode estar vazio!");
-
-					}
+					errors.TestErrors(textCriarFabricante);
 
 					modelo = textCriarModelo.getText();
 
-					if (modelo == null || modelo.isEmpty()) {
-
-						textCriarModelo.setBackground(Color.red);
-						throw new RuntimeException("O campo 'Modelo' não pode estar vazio!");
-
-					}
+					errors.TestErrors(textCriarModelo);
 
 					Client c = new Client(nome, telefone, email);
 					Device d = new Device(problema, fabricante, modelo);
@@ -554,21 +521,13 @@ public class MainWindow extends JFrame {
 
 							String custo = textFinalizarCusto.getText();
 
-							if (custo == null || custo.isEmpty()) {
-
-								textFinalizarCusto.setBackground(Color.red);
-								throw new RuntimeException("O campo 'Custo' não pode estar vazio!");
-
-							}
+							errors.TestErrors(textFinalizarCusto);
 
 							String preco = textFinalizarValor.getText();
 
-							if (preco == null || preco.isEmpty()) {
+							errors.TestErrors(textFinalizarValor);
 
-								textFinalizarValor.setBackground(Color.red);
-								throw new RuntimeException("O campo 'Valor' não pode estar vazio!");
-
-							}
+							errors.TestErrors(rdbtnFinalizarFinalizar, rdbtnCancelarOrdem);
 
 							if (rdbtnFinalizarFinalizar.isSelected() == true) {
 
@@ -585,27 +544,26 @@ public class MainWindow extends JFrame {
 								lista.get(index).setStatus(status);
 							}
 
-							if (rdbtnCancelarOrdem.isSelected() == false
-									&& rdbtnFinalizarFinalizar.isSelected() == false) {
-
-								rdbtnCancelarOrdem.setBackground(Color.red);
-								rdbtnFinalizarFinalizar.setBackground(Color.red);
-
-								throw new RuntimeException("Selecione um Status antes de salvar!");
-
-							}
-
 							lista.get(index).setCost(Double.parseDouble(custo));
 							lista.get(index).setPrice(Double.parseDouble(preco));
+
+							textFinalizarCliente.setText("");
+							textFinalizarDescricao.setText("");
+							textFinalizarModelo.setText("");
+							textFinalizarData.setText("");
+							textFinalizarStatus.setText("");
+							textFinalizarCusto.setText("");
+							textFinalizarValor.setText("");
 
 						} catch (RuntimeException e) {
 
 							JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-							rdbtnCancelarOrdem.setBackground(rdbtnFiltrarCliente.getBackground());
-							rdbtnFinalizarFinalizar.setBackground(rdbtnFiltrarCliente.getBackground());
-							textFinalizarCusto.setBackground(Color.white);
-							textFinalizarValor.setBackground(Color.white);
+
 						}
+						rdbtnCancelarOrdem.setBackground(rdbtnFiltrarCliente.getBackground());
+						rdbtnFinalizarFinalizar.setBackground(rdbtnFiltrarCliente.getBackground());
+						textFinalizarCusto.setBackground(Color.white);
+						textFinalizarValor.setBackground(Color.white);
 
 					}
 				});
@@ -656,20 +614,7 @@ public class MainWindow extends JFrame {
 		// telaListar.add(tableListar);
 
 		JButton btnListarFiltrar = new JButton("Filtrar");
-		/*
-		 * btnListarFiltrar.addActionListener(new ActionListener() { public void
-		 * actionPerformed(ActionEvent e) {
-		 * 
-		 * int rowCount = modelo.getRowCount(); for (int i = rowCount - 1; i >= 0; i--)
-		 * { modelo.removeRow(i); }
-		 * 
-		 * for (WorkOrder p : lista) {
-		 * 
-		 * modelo.addRow(new Object[] { p.getNumber(),p.getStatus(), p.getName(),
-		 * p.getEmail(), p.getPhone(), p.getModel(), p.getManufacture(), p.getDate() });
-		 * 
-		 * } } });
-		 */
+
 		btnListarFiltrar.setBounds(355, 94, 89, 23);
 		telaListar.add(btnListarFiltrar);
 
@@ -721,33 +666,43 @@ public class MainWindow extends JFrame {
 		telaBalanco.add(lblBalanco);
 
 		textBalancoCusto = new JTextField();
-		textBalancoCusto.setBounds(319, 102, 104, 20);
+		textBalancoCusto.setBounds(369, 102, 67, 20);
 		telaBalanco.add(textBalancoCusto);
 		textBalancoCusto.setColumns(10);
-		
-		
 
 		textBalancoPagamento = new JTextField();
-		textBalancoPagamento.setBounds(197, 102, 104, 20);
+		textBalancoPagamento.setBounds(263, 102, 67, 20);
 		telaBalanco.add(textBalancoPagamento);
 		textBalancoPagamento.setColumns(10);
 
 		textBalancoLucro = new JTextField();
-		textBalancoLucro.setBounds(441, 102, 104, 20);
+		textBalancoLucro.setBounds(476, 102, 67, 20);
 		telaBalanco.add(textBalancoLucro);
 		textBalancoLucro.setColumns(10);
 
 		JLabel lblBalancoLucro = new JLabel("Lucro Total");
-		lblBalancoLucro.setBounds(441, 84, 80, 16);
+		lblBalancoLucro.setBounds(476, 84, 80, 16);
 		telaBalanco.add(lblBalancoLucro);
 
 		JLabel lblBalancoCusto = new JLabel("Custo total");
-		lblBalancoCusto.setBounds(319, 84, 80, 16);
+		lblBalancoCusto.setBounds(369, 84, 80, 16);
 		telaBalanco.add(lblBalancoCusto);
 
-		JLabel lblRendimentos = new JLabel("Rendimentos");
-		lblRendimentos.setBounds(197, 84, 93, 16);
+		JLabel lblRendimentos = new JLabel("Saldo Bruto");
+		lblRendimentos.setBounds(263, 84, 93, 16);
 		telaBalanco.add(lblRendimentos);
+
+		JLabel lblR = new JLabel("R$");
+		lblR.setBounds(241, 104, 16, 16);
+		telaBalanco.add(lblR);
+
+		JLabel label = new JLabel("R$");
+		label.setBounds(347, 104, 16, 16);
+		telaBalanco.add(label);
+
+		JLabel label_1 = new JLabel("R$");
+		label_1.setBounds(455, 104, 16, 16);
+		telaBalanco.add(label_1);
 
 		// ******************************************************/< Tela Menu Lateral
 		// >/*********************************************************
@@ -821,8 +776,8 @@ public class MainWindow extends JFrame {
 				telaFinalizar.setVisible(false);
 				telaListar.setVisible(false);
 				telaBalanco.setVisible(true);
-				
-				Balance b= new Balance();
+
+				Balance b = new Balance();
 				textBalancoCusto.setText(String.valueOf(b.getTotalCost(lista)));
 				textBalancoPagamento.setText(String.valueOf(b.getTotalPayment(lista)));
 				textBalancoLucro.setText(String.valueOf(b.getTotalProfit(lista)));
