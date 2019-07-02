@@ -7,7 +7,8 @@ import java.awt.Font;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.LinkedList;
+import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.Box;
@@ -37,8 +38,9 @@ import javax.swing.table.DefaultTableModel;
 import aplication.Balance;
 import aplication.Client;
 import aplication.Device;
-import aplication.WorkOrder;
 import aplication.Errors;
+import aplication.WorkOrder;
+import database.Arquivo;
 
 public class MainWindow extends JFrame {
 
@@ -62,6 +64,8 @@ public class MainWindow extends JFrame {
 	private JTextField textBalancoCusto;
 	private JTextField textBalancoPagamento;
 	private JTextField textBalancoLucro;
+
+	String FileLocation = "C:\\Users\\Thulio Fonseca\\Documents\\eclipse workspace\\Gaos\\lib\\database.csv";
 
 	public static void main(String[] args) {
 
@@ -95,10 +99,12 @@ public class MainWindow extends JFrame {
 
 	}
 
-	public MainWindow() {
+	List<WorkOrder> lista = new ArrayList<WorkOrder>();
+
+	public MainWindow() throws ParseException {
 
 		Errors errors = new Errors();
-		List<WorkOrder> lista = new LinkedList<WorkOrder>();
+		Arquivo file = new Arquivo();
 
 		setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		setResizable(false);
@@ -269,7 +275,10 @@ public class MainWindow extends JFrame {
 					Client c = new Client(nome, telefone, email);
 					Device d = new Device(problema, fabricante, modelo);
 					WorkOrder ordem = new WorkOrder(status, c, d, data, custo, preco);
-					lista.add(ordem);
+
+					// lista.add(ordem);
+					// System.out.println("lista - "+ );
+					file.ToFile(FileLocation, ordem);
 
 					textCriarCliente.setText(null);
 					textCriarTelefone.setText(null);
@@ -469,19 +478,21 @@ public class MainWindow extends JFrame {
 
 			public void actionPerformed(ActionEvent arg0) {
 
-				for (int i = 0; i < lista.size(); i++) {
+				lista = file.FromFile(FileLocation);
+
+				for (WorkOrder p : lista) {
 
 					if (rdbtnFiltrarCliente.isSelected() == true) {
 
-						String name = lista.get(i).getName();
+						String name = p.getName();
 
 						if (textFinalizarPesquisar.getText().equals(name)) {
 
-							textFinalizarCliente.setText(lista.get(i).getName());
-							textFinalizarDescricao.setText(lista.get(i).getTrouble());
-							textFinalizarModelo.setText(lista.get(i).getModel());
-							textFinalizarData.setText(lista.get(i).getDate());
-							textFinalizarStatus.setText(lista.get(i).getStatus());
+							textFinalizarCliente.setText(p.getName());
+							textFinalizarDescricao.setText(p.getTrouble());
+							textFinalizarModelo.setText(p.getModel());
+							textFinalizarData.setText(p.getDate());
+							textFinalizarStatus.setText(p.getStatus());
 
 						}
 
@@ -489,19 +500,19 @@ public class MainWindow extends JFrame {
 
 					else {
 
-						long num = lista.get(i).getNumber();
+						long num = p.getNumber();
 
 						try {
 
 							if (num == Long.parseLong(textFinalizarPesquisar.getText())) {
 
-								textFinalizarCliente.setText(lista.get(i).getName());
-								textFinalizarDescricao.setText(lista.get(i).getTrouble());
-								textFinalizarModelo.setText(lista.get(i).getModel());
-								textFinalizarData.setText(lista.get(i).getDate());
-								textFinalizarStatus.setText(lista.get(i).getStatus());
+								textFinalizarCliente.setText(p.getName());
+								textFinalizarDescricao.setText(p.getTrouble());
+								textFinalizarModelo.setText(p.getModel());
+								textFinalizarData.setText(p.getDate());
+								textFinalizarStatus.setText(p.getStatus());
 
-								index = i;
+								 index = lista.indexOf(p);
 
 							}
 
@@ -520,14 +531,26 @@ public class MainWindow extends JFrame {
 						try {
 
 							String custo = textFinalizarCusto.getText();
-
-							errors.TestErrors(textFinalizarCusto);
+							custo = textFinalizarCusto.getText();
 
 							String preco = textFinalizarValor.getText();
 
 							errors.TestErrors(textFinalizarValor);
 
 							errors.TestErrors(rdbtnFinalizarFinalizar, rdbtnCancelarOrdem);
+
+							lista.get(index).setCost(Double.parseDouble(custo));
+							lista.get(index).setPrice(Double.parseDouble(preco));
+							
+							
+
+							textFinalizarCliente.setText("");
+							textFinalizarDescricao.setText("");
+							textFinalizarModelo.setText("");
+							textFinalizarData.setText("");
+							textFinalizarStatus.setText("");
+							textFinalizarCusto.setText("");
+							textFinalizarValor.setText("");
 
 							if (rdbtnFinalizarFinalizar.isSelected() == true) {
 
@@ -544,22 +567,14 @@ public class MainWindow extends JFrame {
 								lista.get(index).setStatus(status);
 							}
 
-							lista.get(index).setCost(Double.parseDouble(custo));
-							lista.get(index).setPrice(Double.parseDouble(preco));
-
-							textFinalizarCliente.setText("");
-							textFinalizarDescricao.setText("");
-							textFinalizarModelo.setText("");
-							textFinalizarData.setText("");
-							textFinalizarStatus.setText("");
-							textFinalizarCusto.setText("");
-							textFinalizarValor.setText("");
+							finaliza.clearSelection();
 
 						} catch (RuntimeException e) {
 
 							JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
 
 						}
+
 						rdbtnCancelarOrdem.setBackground(rdbtnFiltrarCliente.getBackground());
 						rdbtnFinalizarFinalizar.setBackground(rdbtnFiltrarCliente.getBackground());
 						textFinalizarCusto.setBackground(Color.white);
@@ -756,10 +771,12 @@ public class MainWindow extends JFrame {
 					modelo.removeRow(i);
 				}
 
+				lista = file.FromFile(FileLocation);
+
 				for (WorkOrder p : lista) {
 
-					modelo.addRow(new Object[] { p.getNumber(), p.getStatus(), p.getName(), p.getEmail(), p.getPhone(),
-							p.getModel(), p.getManufacture(), p.getDate() });
+					modelo.addRow(new Object[] { lista.indexOf(p), p.getStatus(), p.getName(), p.getEmail(),
+							p.getPhone(), p.getModel(), p.getManufacture(), p.getDate() });
 
 				}
 
@@ -778,18 +795,19 @@ public class MainWindow extends JFrame {
 				telaBalanco.setVisible(true);
 
 				Balance b = new Balance();
-				textBalancoCusto.setText(String.valueOf(b.getTotalCost(lista)));
-				textBalancoPagamento.setText(String.valueOf(b.getTotalPayment(lista)));
-				textBalancoLucro.setText(String.valueOf(b.getTotalProfit(lista)));
+				textBalancoCusto.setText(String.format("%.2f", b.getTotalCost(lista)));
+				textBalancoPagamento.setText(String.format("%.2f", b.getTotalPayment(lista)));
+				textBalancoLucro.setText(String.format("%.2f", b.getTotalProfit(lista)));
 
 				int rowCount = modeloBalanco.getRowCount();
 				for (int i = rowCount - 1; i >= 0; i--) {
 					modeloBalanco.removeRow(i);
 				}
+				lista = file.FromFile(FileLocation);
 
 				for (WorkOrder p : lista) {
 
-					modeloBalanco.addRow(new Object[] { p.getNumber(), p.getStatus(), p.getName(), p.getDate(),
+					modeloBalanco.addRow(new Object[] { lista.indexOf(p), p.getStatus(), p.getName(), p.getDate(),
 							p.getCost(), p.getPrice() });
 
 				}

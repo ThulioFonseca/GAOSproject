@@ -33,7 +33,7 @@ public class Balance {
 
 	public double getTotalProfit(List<WorkOrder> lista) {
 
-				totalProfit = totalPayment - totalCost;
+		totalProfit = totalPayment - totalCost;
 		return totalProfit;
 	}
 

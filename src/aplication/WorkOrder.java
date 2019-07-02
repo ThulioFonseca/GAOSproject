@@ -1,22 +1,19 @@
 package aplication;
 
-
-
 public class WorkOrder {
 	private String status;
 	private long number = 000;
 	private String date;
 	private double cost;
 	private double price;
-	private Device d;
-	private Client c;
+	private Device device;
+	private Client cliente;
 	private static int ID_sequence = 000;
-
 
 	public WorkOrder(String status, Client c, Device d, String date, double cost, double price) {
 		this.status = status;
-		this.c = c;
-		this.d = d;
+		this.cliente = c;
+		this.device = d;
 		this.number = ID_sequence++;
 		this.date = date;
 		this.cost = cost;
@@ -33,28 +30,28 @@ public class WorkOrder {
 	}
 
 	public String getName() {
-		return c.getName();
+		return cliente.getName();
 	}
 
 	public String getEmail() {
-		return c.getEmail();
+		return cliente.getEmail();
 	}
 
 	public String getPhone() {
-		return c.getPhone();
+		return cliente.getPhone();
 	}
 
 	public String getModel() {
-		return d.getModel();
+		return device.getModel();
 	}
 
 	public String getManufacture() {
-		return d.getManufacture();
+		return device.getManufacture();
 
 	}
 
 	public String getTrouble() {
-		return d.getTrouble();
+		return device.getTrouble();
 
 	}
 
@@ -85,7 +82,5 @@ public class WorkOrder {
 	public void setPrice(double price) {
 		this.price = price;
 	}
-
-	
 
 }
